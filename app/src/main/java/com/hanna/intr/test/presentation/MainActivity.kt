@@ -1,4 +1,4 @@
-package com.hanna.intr.test
+package com.hanna.intr.test.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
