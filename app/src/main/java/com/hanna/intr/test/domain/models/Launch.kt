@@ -1,8 +1,9 @@
 package com.hanna.intr.test.domain.models
 
 data class Launch(
+    val id: String,
     val name: String,
-    val dateUtc: String,
-    val success: Boolean?,
-    val details: String?
+    val date: String,
+    val success: Boolean,
+    val details: String
 )

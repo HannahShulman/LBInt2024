@@ -15,7 +15,6 @@ import com.hanna.intr.test.ui.theme.LBInt2024Theme
 import dagger.hilt.EntryPoint
 
 
-@EntryPoint
 class MainListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
