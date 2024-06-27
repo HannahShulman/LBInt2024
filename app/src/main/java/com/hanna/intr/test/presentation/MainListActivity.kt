@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.hanna.intr.test.ui.theme.LBInt2024Theme
+import dagger.hilt.EntryPoint
 
-class MainActivity : ComponentActivity() {
+
+@EntryPoint
+class MainListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
