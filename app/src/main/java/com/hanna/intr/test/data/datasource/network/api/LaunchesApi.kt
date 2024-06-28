@@ -6,7 +6,7 @@ import retrofit2.http.Path
 
 interface LaunchApi {
     @GET("v4/launches")
-    suspend fun getLaunches(): List<LaunchDto>
+    suspend fun getAllLaunches(): List<LaunchDto>
 
     @GET("v4/launches/{Id}")
     suspend fun getLaunchById(@Path("Id") id: String): LaunchDto

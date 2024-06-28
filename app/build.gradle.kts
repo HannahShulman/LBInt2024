@@ -67,11 +67,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.mockk) // Add MockK dependency
+    testImplementation (libs.kotlinx.coroutines.test)
 
     //network
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
 
+    //DI
     implementation(libs.hilt.android)
     kapt(libs.dagger.hilt.compiler)
 
