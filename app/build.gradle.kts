@@ -68,6 +68,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //network
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+
     implementation(libs.hilt.android)
     kapt(libs.dagger.hilt.compiler)
 
