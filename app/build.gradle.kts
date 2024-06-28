@@ -73,9 +73,19 @@ dependencies {
     //network
     implementation (libs.retrofit)
     implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
+
 
     //DI
     implementation(libs.hilt.android)
     kapt(libs.dagger.hilt.compiler)
+
+    //Room
+    implementation (libs.androidx.room.runtime)
+    kapt (libs.androidx.room.compiler) // For Kotlin use
+
+    // Optional - Kotlin Extensions and Coroutines support for Room
+    implementation (libs.androidx.room.ktx)
+
 
 }

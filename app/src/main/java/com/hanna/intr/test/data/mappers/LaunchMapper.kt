@@ -18,7 +18,7 @@ fun LaunchDto.map(): Launch {
     return Launch(
         id = id,
         name = name,
-        date = formatDateString(dateUtc),
+        date = formatDateString(date_utc),
         success = success,
         details = details.orEmpty().takeIf { it.isNotEmpty() } ?: "Sorry, no details!"
     )

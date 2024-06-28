@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class LaunchDto(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
-    @SerialName("date_utc") val dateUtc: String,
+    @SerialName("date_utc") val date_utc: String,
     @SerialName("success") val success: Boolean,
     @SerialName("details") val details: String?
 )
