@@ -16,11 +16,9 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class DrawsViewModelTest {
+class LaunchesListViewModelTest {
 
-    private val drawsList = listOf<Launch>(
-
-    )
+    private val launchList = listOf<Launch>()
 
     private val fetchAllLaunchesUseCase: FetchAllLaunchesUseCase = mockk(relaxed = true)
     private lateinit var viewModel: LaunchesListViewModel
@@ -31,10 +29,9 @@ class DrawsViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-
     @Test
-    fun `viewmodel init triggers fetchDraws`() = runTest {
-        coEvery { fetchAllLaunchesUseCase() } returns Result.success(drawsList)
+    fun `viewmodel init triggers fetchAllLaunches`() = runTest {
+        coEvery { fetchAllLaunchesUseCase() } returns Result.success(launchList)
 
         // Recreate the viewModel to trigger init block
         viewModel = LaunchesListViewModel(fetchAllLaunchesUseCase)
@@ -43,22 +40,22 @@ class DrawsViewModelTest {
     }
 
     @Test
-    fun `fetchDraws success, updates drawsListScreenUiState`() = runTest {
+    fun `fetchAllLaunches success, updates launchesListUiState`() = runTest {
 
-        coEvery { fetchAllLaunchesUseCase() } returns Result.success(drawsList)
+        coEvery { fetchAllLaunchesUseCase() } returns Result.success(launchList)
         viewModel = LaunchesListViewModel(fetchAllLaunchesUseCase)
 
         viewModel.fetchAllLaunches()
 
         val state = viewModel.launchesListUiState.first()
         assertEquals(false, state.isLoading)
-        assertEquals(drawsList, state.launchesList)
+        assertEquals(launchList, state.launchesList)
         assertEquals(null, state.error)
     }
 
     @Test
-    fun `fetchDraws failure updates drawsListScreenUiState`() = runTest {
-        val errorMessage = "Error fetching draws"
+    fun `fetchAllLaunches failure updates launchesListUiState`() = runTest {
+        val errorMessage = "Error fetching launches"
         coEvery { fetchAllLaunchesUseCase() } returns Result.failure(Exception(errorMessage))
         viewModel = LaunchesListViewModel(fetchAllLaunchesUseCase)
 

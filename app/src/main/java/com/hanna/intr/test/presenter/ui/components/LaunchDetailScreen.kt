@@ -13,14 +13,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hanna.intr.test.R
+import com.hanna.intr.test.presenter.intents.LaunchDetailIntent
 import com.hanna.intr.test.presenter.viewmodels.LaunchByIdViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun LaunchDetailScreen(launchId: String?, launchByIdViewModel: LaunchByIdViewModel = getViewModel()){
+fun LaunchDetailScreen(launchId: String, launchByIdViewModel: LaunchByIdViewModel = getViewModel()) {
     val launchesListScreenUiState = launchByIdViewModel.launchByIdUiState.collectAsState()
-    LaunchedEffect(key1 = "") {
-        launchByIdViewModel.fetchLaunchById(launchId)
+
+    LaunchedEffect(launchId) {
+        launchByIdViewModel.handleIntent(LaunchDetailIntent.LoadLaunchDetail(launchId))
     }
 
     Column {

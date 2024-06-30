@@ -10,7 +10,7 @@ import com.hanna.intr.test.presenter.routes.NavRoutes
 
 
 @Composable
-fun LaunchesNavGraph(navController: NavHostController, startDestination: String = NavRoutes.LaunchList.route){
+fun LaunchesNavGraph(navController: NavHostController, startDestination: String = NavRoutes.LaunchList.route) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(NavRoutes.LaunchList.route) {
             LaunchesListScreen(navController)
@@ -19,8 +19,10 @@ fun LaunchesNavGraph(navController: NavHostController, startDestination: String 
             route = NavRoutes.LaunchDetail.route,
             arguments = listOf(navArgument("launchId") { type = NavType.StringType })
         ) { backStackEntry ->
-            val launchId = backStackEntry.arguments?.getString("launchId")
-            LaunchDetailScreen(launchId)
+            backStackEntry.arguments?.getString("launchId")?.let {
+                LaunchDetailScreen(it)
+            }
+
         }
     }
 }

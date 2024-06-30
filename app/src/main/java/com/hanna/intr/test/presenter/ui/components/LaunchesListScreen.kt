@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,24 +28,38 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.hanna.intr.test.domain.models.Launch
+import com.hanna.intr.test.presenter.events.LaunchesListEvent
+import com.hanna.intr.test.presenter.intents.LaunchesListIntent
 import com.hanna.intr.test.presenter.routes.NavRoutes
 import com.hanna.intr.test.presenter.viewmodels.LaunchesListViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun LaunchesListScreen(navHostController: NavHostController, launchesListViewModel: LaunchesListViewModel = getViewModel() ){
+fun LaunchesListScreen(navHostController: NavHostController, launchesListViewModel: LaunchesListViewModel = getViewModel()) {
 
     val launchesListScreenUiState = launchesListViewModel.launchesListUiState.collectAsState()
     val listState = rememberLazyListState()
+
+    LaunchedEffect(Unit) {
+        launchesListViewModel.eventFlow.collect { event ->
+            when (event) {
+                is LaunchesListEvent.NavigateToDetail -> {
+                    navHostController.navigate(NavRoutes.LaunchDetail.createRouteWithArgs(event.id))
+                }
+            }
+        }
+    }
 
     if (launchesListScreenUiState.value.isLoading) {
         LoadingScreen()
     } else if (launchesListScreenUiState.value.launchesList.orEmpty().isNotEmpty()) {
         LazyColumn(state = listState) {
-            items(launchesListScreenUiState.value.launchesList?.size ?: 0) { item ->
-                launchesListScreenUiState.value.launchesList?.get(item)?.let {
+            val launchesList = launchesListScreenUiState.value.launchesList
+            items(launchesList.orEmpty().size) { item ->
+                launchesList?.get(item)?.let {
                     LaunchItem(it) { id ->
-                        navHostController.navigate(NavRoutes.LaunchDetail.createRouteWithArgs(id)) }
+                        launchesListViewModel.handleIntent(LaunchesListIntent.LaunchSelected(id))
+                    }
                 }
             }
         }
