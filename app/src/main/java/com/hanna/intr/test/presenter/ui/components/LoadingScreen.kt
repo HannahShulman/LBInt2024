@@ -1,4 +1,4 @@
-package com.hanna.intr.test.presentation.ui.components
+package com.hanna.intr.test.presenter.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

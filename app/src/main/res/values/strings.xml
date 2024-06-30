@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LBInt2024</string>
+    <string name="launch_was_successful">Launch was successful</string>
+    <string name="launch_failed">Launch failed</string>
 </resources>

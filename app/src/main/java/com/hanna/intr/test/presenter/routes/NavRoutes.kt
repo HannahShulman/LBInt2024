@@ -1,4 +1,4 @@
-package com.hanna.intr.test.presentation.routes
+package com.hanna.intr.test.presenter.routes
 
 sealed class NavRoutes(val route: String) {
     data object LaunchList : NavRoutes("launchList")

@@ -1,17 +1,16 @@
-package com.hanna.intr.test.presentation.ui.components
+package com.hanna.intr.test.presenter.ui.components
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.hanna.intr.test.presentation.routes.NavRoutes
+import com.hanna.intr.test.presenter.routes.NavRoutes
 
 
 @Composable
-fun LaunchesNavGraph(startDestination: String = NavRoutes.LaunchList.route) {
-    val navController = rememberNavController()
+fun LaunchesNavGraph(navController: NavHostController, startDestination: String = NavRoutes.LaunchList.route){
     NavHost(navController = navController, startDestination = startDestination) {
         composable(NavRoutes.LaunchList.route) {
             LaunchesListScreen(navController)
@@ -21,9 +20,7 @@ fun LaunchesNavGraph(startDestination: String = NavRoutes.LaunchList.route) {
             arguments = listOf(navArgument("launchId") { type = NavType.StringType })
         ) { backStackEntry ->
             val launchId = backStackEntry.arguments?.getString("launchId")
-            if (launchId != null) {
-                LaunchDetailScreen(launchId)
-            }
+            LaunchDetailScreen(launchId)
         }
     }
 }

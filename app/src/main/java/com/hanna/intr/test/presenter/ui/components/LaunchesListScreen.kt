@@ -1,13 +1,11 @@
-package com.hanna.intr.test.presentation.ui.components
+package com.hanna.intr.test.presenter.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,17 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.hanna.intr.test.domain.models.Launch
-import com.hanna.intr.test.presentation.routes.NavRoutes
-import com.hanna.intr.test.presentation.viewmodels.LaunchesListViewModel
+import com.hanna.intr.test.presenter.routes.NavRoutes
+import com.hanna.intr.test.presenter.viewmodels.LaunchesListViewModel
+import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun LaunchesListScreen(navHostController: NavHostController, launchesListViewModel: LaunchesListViewModel = hiltViewModel()) {
+fun LaunchesListScreen(navHostController: NavHostController, launchesListViewModel: LaunchesListViewModel = getViewModel() ){
 
     val launchesListScreenUiState = launchesListViewModel.launchesListUiState.collectAsState()
     val listState = rememberLazyListState()
@@ -47,24 +43,14 @@ fun LaunchesListScreen(navHostController: NavHostController, launchesListViewMod
         LazyColumn(state = listState) {
             items(launchesListScreenUiState.value.launchesList?.size ?: 0) { item ->
                 launchesListScreenUiState.value.launchesList?.get(item)?.let {
-                    LaunchItem(it) { id -> navHostController.navigate(NavRoutes.LaunchDetail.createRouteWithArgs(id)) }
+                    LaunchItem(it) { id ->
+                        navHostController.navigate(NavRoutes.LaunchDetail.createRouteWithArgs(id)) }
                 }
             }
         }
     } else if (!launchesListScreenUiState.value.error.isNullOrEmpty()) {
         launchesListScreenUiState.value.error?.let {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize(),
-
-                ) {
-                Text(text = it, textAlign = TextAlign.Center)
-                Button(onClick = { launchesListViewModel.retryFetchAllLaunches() }) {
-                    Text(text = "Retry", textAlign = TextAlign.Center)
-                }
-            }
-
+            ErrorScreen(errorMsg = it, retryAction = { launchesListViewModel.retryFetchAllLaunches() })
         }
     }
 }

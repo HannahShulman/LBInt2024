@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
     kotlin("plugin.serialization") version "2.0.0"
 }
@@ -59,7 +58,6 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
     implementation (libs.androidx.navigation.compose.v253)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -83,14 +81,26 @@ dependencies {
     implementation (libs.logging.interceptor)
 
 
-    //DI
-    implementation(libs.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
-
     //Room
     implementation (libs.androidx.room.runtime)
     kapt (libs.androidx.room.compiler) // For Kotlin use
 
     // Optional - Kotlin Extensions and Coroutines support for Room
     implementation (libs.androidx.room.ktx)
+
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    testImplementation ("io.mockk:mockk:1.12.0")
+    testImplementation ("io.mockk:mockk:1.12.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2")
+    testImplementation ("junit:junit:4.13.2")
+    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation ("android.arch.core:core-testing:1.0.0")
+    testImplementation ("android.arch.core:core-testing:1.0.0")
+
+    // Koin dependencies
+    implementation(libs.koin.android)
+    implementation(libs.koin.android.compat)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.core)
+
 }

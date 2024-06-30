@@ -1,50 +1,48 @@
 package com.hanna.intr.test.di
 
+import android.app.Application
+import androidx.room.Room
+import com.hanna.intr.test.data.datasource.db.AppDatabase
 import com.hanna.intr.test.data.datasource.db.LaunchDao
 import com.hanna.intr.test.data.datasource.network.api.LaunchApi
 import com.hanna.intr.test.data.repositories.LaunchesRepository
 import com.hanna.intr.test.data.repositories.LaunchesRepositoryImpl
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
+import com.hanna.intr.test.domain.usecases.FetchAllLaunchesUseCase
+import com.hanna.intr.test.domain.usecases.FetchLaunchByIdUseCase
+import com.hanna.intr.test.presenter.viewmodels.LaunchByIdViewModel
+import com.hanna.intr.test.presenter.viewmodels.LaunchesListViewModel
+import org.koin.android.ext.koin.androidApplication
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object AppModule {
+val appModule = module {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
+    factory<LaunchesRepository> { LaunchesRepositoryImpl(get(), get()) }
+    single { provideDatabase(androidApplication()) }
+    single<LaunchApi> { createLaunchApi() }
+    single { provideLaunchDao(get()) }
+    single { LaunchesRepositoryImpl(get(), get()) }
+    factory { FetchAllLaunchesUseCase(get()) }
+    factory { FetchLaunchByIdUseCase(get()) }
+    viewModel { LaunchesListViewModel(get()) }
+    viewModel { LaunchByIdViewModel(get()) }
+}
 
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build();
+fun provideDatabase(application: Application): AppDatabase {
+    return Room.databaseBuilder(application, AppDatabase::class.java, "draws_database")
+        .fallbackToDestructiveMigration()
+        .build()
+}
 
-        return Retrofit.Builder()
-            .baseUrl("https://api.spacexdata.com/")
-            .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideLaunchApi(retrofit: Retrofit): LaunchApi {
-        return retrofit.create(LaunchApi::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideLaunchesRepository(
-        launchDao: LaunchDao,
-        launchApi: LaunchApi
-    ): LaunchesRepository {
-        return LaunchesRepositoryImpl(launchApi, launchDao)
-    }
+fun provideLaunchDao(database: AppDatabase): LaunchDao {
+    return database.launchDao()
+}
+fun createLaunchApi(): LaunchApi {
+    return Retrofit.Builder()
+        .baseUrl("https://api.spacexdata.com/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+        .create(LaunchApi::class.java)
 }

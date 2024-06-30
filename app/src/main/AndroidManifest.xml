@@ -15,7 +15,7 @@
         android:name=".MyApp"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.MainListActivity"
+            android:name=".presenter.MainListActivity"
             android:exported="true"
             android:theme="@style/Theme.LBInt2024">
             <intent-filter>

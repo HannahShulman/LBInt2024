@@ -1,18 +1,15 @@
-package com.hanna.intr.test.presentation.viewmodels
+package com.hanna.intr.test.presenter.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanna.intr.test.domain.usecases.FetchAllLaunchesUseCase
-import com.hanna.intr.test.presentation.ui.uistates.LaunchesListUiState
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.hanna.intr.test.presenter.ui.uistates.LaunchesListUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-@HiltViewModel
-class LaunchesListViewModel @Inject constructor(private val fetchListUseCase: FetchAllLaunchesUseCase) : ViewModel() {
+class LaunchesListViewModel (private val fetchListUseCase: FetchAllLaunchesUseCase) : ViewModel() {
 
     private val _launchesListUiState = MutableStateFlow(LaunchesListUiState(false, null, null))
     val launchesListUiState: StateFlow<LaunchesListUiState> = _launchesListUiState.asStateFlow()
@@ -23,7 +20,7 @@ class LaunchesListViewModel @Inject constructor(private val fetchListUseCase: Fe
         }
     }
 
-    private suspend fun fetchAllLaunches() {
+    suspend fun fetchAllLaunches() {
         _launchesListUiState.value = _launchesListUiState.value.copy(isLoading = true, launchesList = null, error = null)
         val result = fetchListUseCase()
         _launchesListUiState.value =
