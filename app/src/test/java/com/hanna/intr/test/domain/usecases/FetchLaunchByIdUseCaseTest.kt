@@ -20,7 +20,6 @@ class FetchLaunchByIdUseCaseTest {
         useCase = FetchLaunchByIdUseCase(repo)
     }
 
-
     @Test
     fun when_usecase_invoked_then_repo_calls_fetchById() = runTest {
 
